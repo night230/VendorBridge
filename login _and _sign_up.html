@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="vb-root">
+  <div class="container" id="vbContainer">
+
+    <div class="form-box login">
+      <form>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in to VendorBridge</p>
+        <div class="input-box">
+          <input type="text" placeholder="Email address" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input type="password" placeholder="Password" required>
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <div class="forgot-link"><a href="forgotpassword.html">Forgot password?</a></div>
+        <button type="submit" class="btn">Sign in</button>        
+      </form>
+    </div>
+
+    <div class="form-box register">
+      <form>
+        <h1>Create account</h1>
+        <p class="subtitle">Join VendorBridge today</p>
+        <div class="input-box">
+          <input type="text" placeholder="Full name" required>
+          <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+          <input type="text" placeholder="Work email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input type="password" placeholder="Password" required>
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <select class="role-select">
+          <option value="" disabled selected>Select your role</option>
+          <option>Procurement Officer</option>
+          <option>Vendor</option>
+          <option>Manager / Approver</option>
+          <option>Admin</option>
+        </select>
+        <button type="submit" class="btn"> Create account</button>
+      </form>
+    </div>
+
+    <div class="toggle-box">
+      <div class="toggle-panel toggle-left">
+        <div class="brand">VendorBridge</div>
+        <h1>Hello, Welcome!</h1>
+        <p>Don't have an account yet?<br>Register ans start your journey.</p>
+        <button class="btn register-btn" id="toRegister">Register</button>
+      </div>
+      <div class="toggle-panel toggle-right">
+        <div class="brand">VendorBridge</div>
+        <h1>Welcome Back!</h1>
+        <p>Already have an account?<br>Sign in karo apne dashboard mein.</p>
+        <button class="btn login-btn" id="toLogin">Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+    <script src="script.js"></script>
+  </body>
+</html>

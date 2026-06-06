@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VendorBridge — Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- ===== TOPBAR ===== -->
+<header class="topbar">
+  <div class="topbar-left">
+    <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-logo">⬡ <span>VendorBridge</span></div>
+  </div>
+
+  <div class="topbar-right">
+    <!-- Notifications -->
+    <button class="icon-btn notif-btn" id="notifBtn" aria-label="Notifications">
+      <i class="fa-solid fa-bell"></i>
+      <span class="notif-badge">5</span>
+    </button>
+
+    <!-- Notification dropdown -->
+    <div class="notif-dropdown" id="notifDropdown">
+      <div class="notif-header">
+        <span>Notifications</span>
+        <button class="notif-clear" onclick="clearNotifs()">Mark all read</button>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item unread">
+          <div class="notif-dot gold"></div>
+          <div>
+            <div class="notif-text">PO #1042 awaiting your approval</div>
+            <div class="notif-time">2 min ago</div>
+          </div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-dot green"></div>
+          <div>
+            <div class="notif-text">Tech Supplies submitted quotation for RFQ #041</div>
+            <div class="notif-time">15 min ago</div>
+          </div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-dot amber"></div>
+          <div>
+            <div class="notif-text">RFQ #040 deadline in 2 days</div>
+            <div class="notif-time">1 hour ago</div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-dot blue"></div>
+          <div>
+            <div class="notif-text">Invoice #INV-1038 sent successfully</div>
+            <div class="notif-time">3 hours ago</div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-dot green"></div>
+          <div>
+            <div class="notif-text">New vendor CleanPro registered</div>
+            <div class="notif-time">Yesterday</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile-wrap" id="profileBtn">
+      <div class="profile-avatar" id="profileAvatar">RP</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">virang shah</div>
+        <div class="profile-role" id="profileRole">Procurement Officer</div>
+      </div>
+      <i class="fa-solid fa-chevron-down profile-chevron" id="profileChevron"></i>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="pd-header">
+        <div class="pd-avatar" id="pdAvatar">RP</div>
+        <div>
+          <div class="pd-name" id="pdName">virang shah</div>
+          <div class="pd-email" id="pdEmail">officer@company.com</div>
+          <div class="pd-role-badge" id="pdRoleBadge">Procurement Officer</div>
+        </div>
+      </div>
+      <div class="pd-menu">
+        <a href="#" class="pd-item" onclick="showPage('profile')">
+          <i class="fa-solid fa-user"></i> My Profile
+        </a>
+        <a href="#" class="pd-item" onclick="showPage('profile')">
+          <i class="fa-solid fa-gear"></i> Account Settings
+        </a>
+        <a href="#" class="pd-item" onclick="showPage('activity')">
+          <i class="fa-solid fa-clock-rotate-left"></i> My Activity
+        </a>
+        <div class="pd-divider"></div>
+        <a href="../login_and_sign_up/login _and _sign_up.html" class="pd-item pd-logout" onclick="doLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== LAYOUT ===== -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a href="#" class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </a>
+
+      <div class="nav-section-label">Procurement</div>
+      <a href="#" class="nav-item" data-page="vendors" onclick="showPage('vendors')">
+        <i class="fa-solid fa-building-store"></i><span>Vendors</span>
+        <span class="nav-badge">12</span>
+      </a>
+      <a href="#" class="nav-item" data-page="rfq" onclick="showPage('rfq')">
+        <i class="fa-solid fa-clipboard-list"></i><span>RFQ</span>
+        <span class="nav-badge">7</span>
+      </a>
+      <a href="#" class="nav-item" data-page="quotations" onclick="showPage('quotations')">
+        <i class="fa-solid fa-receipt"></i><span>Quotations</span>
+      </a>
+
+      <div class="nav-section-label">Approvals</div>
+      <a href="#" class="nav-item" data-page="approvals" onclick="showPage('approvals')">
+        <i class="fa-solid fa-circle-check"></i><span>Approvals</span>
+        <span class="nav-badge urgent">5</span>
+      </a>
+
+      <div class="nav-section-label">Finance</div>
+      <a href="#" class="nav-item" data-page="purchase-orders" onclick="showPage('purchase-orders')">
+        <i class="fa-solid fa-file-invoice"></i><span>Purchase Orders</span>
+      </a>
+      <a href="#" class="nav-item" data-page="invoices" onclick="showPage('invoices')">
+        <i class="fa-solid fa-file-invoice-dollar"></i><span>Invoices</span>
+      </a>
+
+      <div class="nav-section-label">Insights</div>
+      <a href="#" class="nav-item" data-page="activity" onclick="showPage('activity')">
+        <i class="fa-solid fa-clock-rotate-left"></i><span>Activity Logs</span>
+      </a>
+      <a href="#" class="nav-item" data-page="reports" onclick="showPage('reports')">
+        <i class="fa-solid fa-chart-line"></i><span>Reports</span>
+      </a>
+
+      <div class="nav-section-label">Account</div>
+      <a href="#" class="nav-item" data-page="profile" onclick="showPage('profile')">
+        <i class="fa-solid fa-user-gear"></i><span>My Profile</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h2>Dashboard</h2>
+          <p id="dash-greeting">Good morning, Raj. Here's your procurement overview.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-outline" onclick="showPage('rfq')">
+            <i class="fa-solid fa-plus"></i> New RFQ
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card" onclick="showPage('rfq')">
+          <div class="sc-icon gold"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div class="sc-body">
+            <div class="sc-label">Active RFQs</div>
+            <div class="sc-val">7</div>
+            <div class="sc-sub">3 closing this week</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('approvals')">
+          <div class="sc-icon amber"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="sc-body">
+            <div class="sc-label">Pending Approvals</div>
+            <div class="sc-val amber">5</div>
+            <div class="sc-sub">Needs attention</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('purchase-orders')">
+          <div class="sc-icon blue"><i class="fa-solid fa-file-invoice"></i></div>
+          <div class="sc-body">
+            <div class="sc-label">Purchase Orders</div>
+            <div class="sc-val">24</div>
+            <div class="sc-sub">This month</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('reports')">
+          <div class="sc-icon green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div class="sc-body">
+            <div class="sc-label">Total Spend</div>
+            <div class="sc-val green">₹18.7L</div>
+            <div class="sc-sub">+12% vs last month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two column layout -->
+      <div class="dash-grid">
+
+        <!-- Recent RFQs -->
+        <div class="card">
+          <div class="card-header">
+            <span>Recent RFQs</span>
+            <button class="card-link" onclick="showPage('rfq')">View All →</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>RFQ</th><th>Category</th><th>Quotes</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div class="td-main">Office Laptops Q3</div><div class="td-sub">#RFQ-041</div></td><td>IT Equipment</td><td>2/3</td><td><span class="badge active">Active</span></td></tr>
+              <tr><td><div class="td-main">Office Furniture</div><div class="td-sub">#RFQ-040</div></td><td>Furniture</td><td>1/2</td><td><span class="badge pending">Pending</span></td></tr>
+              <tr><td><div class="td-main">Security Cameras</div><div class="td-sub">#RFQ-039</div></td><td>IT Equipment</td><td>4/4</td><td><span class="badge approved">Approved</span></td></tr>
+              <tr><td><div class="td-main">Cleaning Supplies</div><div class="td-sub">#RFQ-038</div></td><td>Services</td><td>2/2</td><td><span class="badge closed">Closed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pending Actions -->
+        <div class="card">
+          <div class="card-header">
+            <span>Pending Actions</span>
+            <button class="card-link" onclick="showPage('approvals')">View All →</button>
+          </div>
+          <div class="action-list">
+            <div class="action-item">
+              <div class="action-icon amber"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="action-body">
+                <div class="action-title">Approve PO #1042</div>
+                <div class="action-sub">₹15,34,000 — Tech Supplies</div>
+              </div>
+              <button class="btn-sm gold" onclick="showPage('approvals')">Review</button>
+            </div>
+            <div class="action-item">
+              <div class="action-icon blue"><i class="fa-solid fa-scale-balanced"></i></div>
+              <div class="action-body">
+                <div class="action-title">Compare RFQ #041 Quotes</div>
+                <div class="action-sub">3 vendors submitted</div>
+              </div>
+              <button class="btn-sm outline" onclick="showPage('quotations')">Compare</button>
+            </div>
+            <div class="action-item">
+              <div class="action-icon green"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+              <div class="action-body">
+                <div class="action-title">Generate Invoice #39</div>
+                <div class="action-sub">PO #1038 — CleanPro</div>
+              </div>
+              <button class="btn-sm outline" onclick="showPage('invoices')">Create</button>
+            </div>
+            <div class="action-item">
+              <div class="action-icon amber"><i class="fa-solid fa-clock"></i></div>
+              <div class="action-body">
+                <div class="action-title">RFQ #040 Deadline Today</div>
+                <div class="action-sub">Office Furniture — 1 quote pending</div>
+              </div>
+              <button class="btn-sm outline" onclick="showPage('rfq')">View</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vendor Performance -->
+        <div class="card">
+          <div class="card-header">
+            <span>Top Vendors</span>
+            <button class="card-link" onclick="showPage('vendors')">View All →</button>
+          </div>
+          <div class="vendor-list">
+            <div class="vendor-row">
+              <div class="vendor-avatar">TS</div>
+              <div class="vendor-info">
+                <div class="vendor-name">Tech Supplies Pvt Ltd</div>
+                <div class="vendor-cat">IT Equipment</div>
+              </div>
+              <div class="vendor-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+              <span class="badge active">Active</span>
+            </div>
+            <div class="vendor-row">
+              <div class="vendor-avatar">CP</div>
+              <div class="vendor-info">
+                <div class="vendor-name">CleanPro Services</div>
+                <div class="vendor-cat">Services</div>
+              </div>
+              <div class="vendor-rating"><i class="fa-solid fa-star"></i> 4.5</div>
+              <span class="badge active">Active</span>
+            </div>
+            <div class="vendor-row">
+              <div class="vendor-avatar">OW</div>
+              <div class="vendor-info">
+                <div class="vendor-name">Office World</div>
+                <div class="vendor-cat">Office Supplies</div>
+              </div>
+              <div class="vendor-rating"><i class="fa-solid fa-star"></i> 4.2</div>
+              <span class="badge active">Active</span>
+            </div>
+            <div class="vendor-row">
+              <div class="vendor-avatar">FC</div>
+              <div class="vendor-info">
+                <div class="vendor-name">FurniCo India</div>
+                <div class="vendor-cat">Furniture</div>
+              </div>
+              <div class="vendor-rating"><i class="fa-solid fa-star"></i> 3.9</div>
+              <span class="badge pending">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <span>Recent Activity</span>
+            <button class="card-link" onclick="showPage('activity')">Full Log →</button>
+          </div>
+          <div class="activity-feed">
+            <div class="af-item">
+              <div class="af-dot green"></div>
+              <div class="af-body">
+                <div class="af-text">Invoice #INV-1042 generated</div>
+                <div class="af-time">5 Jun · 11:42 AM · virang shah</div>
+              </div>
+            </div>
+            <div class="af-item">
+              <div class="af-dot blue"></div>
+              <div class="af-body">
+                <div class="af-text">PO #1042 approved by Sneha Sharma</div>
+                <div class="af-time">4 Jun · 3:15 PM · Sneha Sharma</div>
+              </div>
+            </div>
+            <div class="af-item">
+              <div class="af-dot gold"></div>
+              <div class="af-body">
+                <div class="af-text">Tech Supplies selected for RFQ #041</div>
+                <div class="af-time">3 Jun · 10:30 AM · virang shah</div>
+              </div>
+            </div>
+            <div class="af-item">
+              <div class="af-dot red"></div>
+              <div class="af-body">
+                <div class="af-text">PO #1039 rejected — price too high</div>
+                <div class="af-time">28 May · 4:45 PM · Sneha Sharma</div>
+              </div>
+            </div>
+            <div class="af-item">
+              <div class="af-dot gold"></div>
+              <div class="af-body">
+                <div class="af-text">RFQ #041 created — Office Laptops Q3</div>
+                <div class="af-time">1 Jun · 9:00 AM · virang shah</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card" style="margin-top:0;">
+        <div class="card-header"><span>Quick Actions</span></div>
+        <div class="quick-actions">
+          <button class="qa-btn" onclick="showPage('rfq')">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>New RFQ</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('vendors')">
+            <i class="fa-solid fa-building-user"></i>
+            <span>Add Vendor</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('quotations')">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <span>Compare Quotes</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('approvals')">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Approvals</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('purchase-orders')">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Create PO</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('invoices')">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>Generate Invoice</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('reports')">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Reports</span>
+          </button>
+          <button class="qa-btn" onclick="showPage('activity')">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Activity Logs</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VENDORS PAGE ===== -->
+    <section class="page" id="page-vendors">
+      <div class="page-header">
+        <div><h2>Vendor Management</h2><p>Register and manage your vendor database.</p></div>
+        <div class="page-header-actions">
+          <input class="search-input" placeholder="Search vendors..." id="vendorSearch">
+          <button class="btn-gold" onclick="toggleForm('vendorForm')">
+            <i class="fa-solid fa-plus"></i> Register Vendor
+          </button>
+        </div>
+      </div>
+
+      <div class="collapsible-form" id="vendorForm">
+        <div class="card">
+          <div class="card-header"><span>Register New Vendor</span><button class="card-link" onclick="toggleForm('vendorForm')">✕ Close</button></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Company Name</label><input placeholder="e.g. Tech Supplies Pvt Ltd"></div>
+            <div class="form-group"><label>Category</label><select><option>IT Equipment</option><option>Office Supplies</option><option>Furniture</option><option>Services</option></select></div>
+            <div class="form-group"><label>Contact Person</label><input placeholder="Full name"></div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="vendor@company.com"></div>
+            <div class="form-group"><label>Phone</label><input placeholder="+91 98765 43210"></div>
+            <div class="form-group"><label>GST Number</label><input placeholder="22AAAAA0000A1Z5"></div>
+            <div class="form-group" style="grid-column:1/-1"><label>Address</label><textarea placeholder="Full address..."></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-gold">Save Vendor</button>
+            <button class="btn-outline" onclick="toggleForm('vendorForm')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>All Vendors (12)</span>
+          <select class="select-sm"><option>All Categories</option><option>IT Equipment</option><option>Office Supplies</option><option>Furniture</option><option>Services</option></select>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Vendor</th><th>Category</th><th>GST Number</th><th>Contact</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><div class="td-main">Tech Supplies Pvt Ltd</div><div class="td-sub">Ahmedabad, Gujarat</div></td><td>IT Equipment</td><td class="mono">22AABCT1234C1Z5</td><td>Amit Shah</td><td><span class="star-rating">★ 4.8</span></td><td><span class="badge active">Active</span></td><td><div class="td-actions"><button class="btn-sm outline">View</button><button class="btn-sm outline">Edit</button></div></td></tr>
+            <tr><td><div class="td-main">Office World</div><div class="td-sub">Mumbai, Maharashtra</div></td><td>Office Supplies</td><td class="mono">27AABCO5678B2Z6</td><td>Priya Mehta</td><td><span class="star-rating">★ 4.2</span></td><td><span class="badge active">Active</span></td><td><div class="td-actions"><button class="btn-sm outline">View</button><button class="btn-sm outline">Edit</button></div></td></tr>
+            <tr><td><div class="td-main">FurniCo India</div><div class="td-sub">Delhi, India</div></td><td>Furniture</td><td class="mono">07AABCF9012C3Z7</td><td>Rahul Gupta</td><td><span class="star-rating">★ 3.9</span></td><td><span class="badge pending">Pending</span></td><td><div class="td-actions"><button class="btn-sm outline">View</button><button class="btn-sm outline">Edit</button></div></td></tr>
+            <tr><td><div class="td-main">CleanPro Services</div><div class="td-sub">Bangalore, Karnataka</div></td><td>Services</td><td class="mono">29AABCC3456D4Z8</td><td>Suresh Kumar</td><td><span class="star-rating">★ 4.5</span></td><td><span class="badge active">Active</span></td><td><div class="td-actions"><button class="btn-sm outline">View</button><button class="btn-sm outline">Edit</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== RFQ PAGE ===== -->
+    <section class="page" id="page-rfq">
+      <div class="page-header">
+        <div><h2>Request for Quotation</h2><p>Create and manage procurement requests.</p></div>
+        <div class="page-header-actions">
+          <button class="btn-gold" onclick="toggleForm('rfqForm')">
+            <i class="fa-solid fa-plus"></i> Create RFQ
+          </button>
+        </div>
+      </div>
+
+      <div class="collapsible-form" id="rfqForm">
+        <div class="card">
+          <div class="card-header"><span>New RFQ</span><button class="card-link" onclick="toggleForm('rfqForm')">✕ Close</button></div>
+          <div class="form-grid">
+            <div class="form-group"><label>RFQ Title</label><input placeholder="e.g. Office Laptops Q3 2025"></div>
+            <div class="form-group"><label>Category</label><select><option>IT Equipment</option><option>Office Supplies</option><option>Furniture</option><option>Services</option></select></div>
+            <div class="form-group"><label>Product / Service</label><input placeholder="e.g. Dell Latitude 5540"></div>
+            <div class="form-group"><label>Quantity</label><input type="number" placeholder="e.g. 25"></div>
+            <div class="form-group"><label>Submission Deadline</label><input type="date"></div>
+            <div class="form-group"><label>Assign Vendors</label><select multiple style="height:80px;"><option>Tech Supplies Pvt Ltd</option><option>Office World</option><option>FurniCo India</option><option>CleanPro Services</option></select></div>
+            <div class="form-group" style="grid-column:1/-1"><label>Description / Specifications</label><textarea placeholder="Detailed specs, requirements, terms..."></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-gold">Submit RFQ</button>
+            <button class="btn-outline" onclick="toggleForm('rfqForm')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>All RFQs</span></div>
+        <table class="data-table">
+          <thead><tr><th>RFQ ID</th><th>Title</th><th>Category</th><th>Vendors</th><th>Deadline</th><th>Quotes</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td class="mono gold">#RFQ-041</td><td><div class="td-main">Office Laptops Q3</div></td><td>IT Equipment</td><td>3</td><td>20 Jun 2026</td><td>2/3</td><td><span class="badge active">Active</span></td><td><button class="btn-sm gold" onclick="showPage('quotations')">Compare</button></td></tr>
+            <tr><td class="mono gold">#RFQ-040</td><td><div class="td-main">Office Furniture Set</div></td><td>Furniture</td><td>2</td><td>18 Jun 2026</td><td>1/2</td><td><span class="badge pending">Pending</span></td><td><button class="btn-sm outline">View</button></td></tr>
+            <tr><td class="mono gold">#RFQ-039</td><td><div class="td-main">Security Cameras</div></td><td>IT Equipment</td><td>4</td><td>15 Jun 2026</td><td>4/4</td><td><span class="badge approved">Approved</span></td><td><button class="btn-sm outline">View</button></td></tr>
+            <tr><td class="mono gold">#RFQ-038</td><td><div class="td-main">Cleaning Supplies</div></td><td>Services</td><td>2</td><td>10 Jun 2026</td><td>2/2</td><td><span class="badge closed">Closed</span></td><td><button class="btn-sm outline">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== QUOTATIONS PAGE ===== -->
+    <section class="page" id="page-quotations">
+      <div class="page-header">
+        <div><h2>Quotation Comparison</h2><p>RFQ #RFQ-041 — Office Laptops Q3 · 25 units</p></div>
+        <div class="page-header-actions">
+          <button class="btn-outline">Export Comparison</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>Side-by-side Comparison</span><span class="card-hint"><span class="badge active">★ Best Value</span></span></div>
+        <div style="overflow-x:auto;">
+          <table class="data-table compare-table">
+            <thead>
+              <tr>
+                <th>Criteria</th>
+                <th class="best-col">Tech Supplies Pvt Ltd ★</th>
+                <th>Office World</th>
+                <th>GadgetHub India</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="criteria-col">Unit Price</td><td class="best-col lowest">₹52,000</td><td>₹55,500</td><td>₹58,000</td></tr>
+              <tr><td class="criteria-col">Total (25 units)</td><td class="best-col lowest">₹13,00,000</td><td>₹13,87,500</td><td>₹14,50,000</td></tr>
+              <tr><td class="criteria-col">Delivery Time</td><td class="best-col">7 days</td><td>10 days</td><td>5 days</td></tr>
+              <tr><td class="criteria-col">Warranty</td><td class="best-col">3 years</td><td>1 year</td><td>2 years</td></tr>
+              <tr><td class="criteria-col">GST</td><td class="best-col">18%</td><td>18%</td><td>18%</td></tr>
+              <tr><td class="criteria-col">Vendor Rating</td><td class="best-col"><span class="star-rating">★ 4.8</span></td><td><span class="star-rating">★ 4.2</span></td><td><span class="star-rating">★ 3.7</span></td></tr>
+              <tr><td class="criteria-col">Payment Terms</td><td class="best-col">30 days</td><td>15 days</td><td>Advance</td></tr>
+              <tr><td class="criteria-col">Support</td><td class="best-col">24/7 onsite</td><td>Email only</td><td>Business hours</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-actions" style="margin-top:16px;">
+          <button class="btn-gold" onclick="showPage('approvals')">
+            <i class="fa-solid fa-check"></i> Select Tech Supplies & Send for Approval
+          </button>
+          <button class="btn-outline">Download PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APPROVALS PAGE ===== -->
+    <section class="page" id="page-approvals">
+      <div class="page-header">
+        <div><h2>Approval Workflow</h2><p>Review and act on pending procurement approvals.</p></div>
+      </div>
+
+      <div class="approval-cards" id="approvalList">
+        <div class="approval-card" data-id="1">
+          <div class="appr-top">
+            <div>
+              <div class="appr-title">PO #1042 — Office Laptops Q3</div>
+              <div class="appr-meta">Submitted by: virang shah &nbsp;·&nbsp; Amount: ₹15,34,000 &nbsp;·&nbsp; Vendor: Tech Supplies Pvt Ltd &nbsp;·&nbsp; 2 Jun 2026</div>
+            </div>
+            <span class="badge pending">Pending</span>
+          </div>
+          <div class="appr-bottom">
+            <input class="remark-input" placeholder="Add approval remarks...">
+            <button class="btn-approve" onclick="approveCard(this)"><i class="fa-solid fa-check"></i> Approve</button>
+            <button class="btn-reject" onclick="rejectCard(this)"><i class="fa-solid fa-xmark"></i> Reject</button>
+          </div>
+        </div>
+        <div class="approval-card" data-id="2">
+          <div class="appr-top">
+            <div>
+              <div class="appr-title">PO #1041 — Security Cameras</div>
+              <div class="appr-meta">Submitted by: virang shah &nbsp;·&nbsp; Amount: ₹2,83,200 &nbsp;·&nbsp; Vendor: Tech Supplies Pvt Ltd &nbsp;·&nbsp; 1 Jun 2026</div>
+            </div>
+            <span class="badge pending">Pending</span>
+          </div>
+          <div class="appr-bottom">
+            <input class="remark-input" placeholder="Add approval remarks...">
+            <button class="btn-approve" onclick="approveCard(this)"><i class="fa-solid fa-check"></i> Approve</button>
+            <button class="btn-reject" onclick="rejectCard(this)"><i class="fa-solid fa-xmark"></i> Reject</button>
+          </div>
+        </div>
+        <div class="approval-card done" data-id="3">
+          <div class="appr-top">
+            <div>
+              <div class="appr-title">RFQ #RFQ-038 — Cleaning Supplies</div>
+              <div class="appr-meta">Approved by: Sneha Sharma &nbsp;·&nbsp; ₹53,100 &nbsp;·&nbsp; Remark: "Proceed with PO." &nbsp;·&nbsp; 29 May 2026</div>
+            </div>
+            <span class="badge approved">Approved</span>
+          </div>
+          <div class="appr-bottom disabled">
+            <input class="remark-input" value="Proceed with PO." readonly>
+            <button class="btn-approve" disabled><i class="fa-solid fa-check"></i> Approved</button>
+          </div>
+        </div>
+        <div class="approval-card done" data-id="4">
+          <div class="appr-top">
+            <div>
+              <div class="appr-title">PO #1039 — Office Furniture</div>
+              <div class="appr-meta">Rejected by: Sneha Sharma &nbsp;·&nbsp; Reason: "Price too high, re-quote required." &nbsp;·&nbsp; 28 May 2026</div>
+            </div>
+            <span class="badge rejected">Rejected</span>
+          </div>
+          <div class="appr-bottom disabled">
+            <input class="remark-input" value="Price too high, re-quote required." readonly>
+            <button class="btn-reject" disabled><i class="fa-solid fa-xmark"></i> Rejected</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PURCHASE ORDERS PAGE ===== -->
+    <section class="page" id="page-purchase-orders">
+      <div class="page-header">
+        <div><h2>Purchase Orders</h2><p>View and manage all generated purchase orders.</p></div>
+        <div class="page-header-actions">
+          <button class="btn-gold" onclick="showPage('invoices')">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Generate Invoice
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>All Purchase Orders</span></div>
+        <table class="data-table">
+          <thead><tr><th>PO Number</th><th>Vendor</th><th>Items</th><th>Subtotal</th><th>GST (18%)</th><th>Total</th><th>Date</th><th>Status</th><th>Invoice</th></tr></thead>
+          <tbody>
+            <tr><td class="mono gold">#PO-1042</td><td>Tech Supplies Pvt Ltd</td><td>Laptops × 25</td><td>₹13,00,000</td><td>₹2,34,000</td><td style="font-weight:700;">₹15,34,000</td><td>3 Jun 2026</td><td><span class="badge approved">Approved</span></td><td><button class="btn-sm gold" onclick="showPage('invoices')">Invoice</button></td></tr>
+            <tr><td class="mono gold">#PO-1041</td><td>Tech Supplies Pvt Ltd</td><td>Cameras × 10</td><td>₹2,40,000</td><td>₹43,200</td><td style="font-weight:700;">₹2,83,200</td><td>2 Jun 2026</td><td><span class="badge pending">Pending</span></td><td><button class="btn-sm outline" onclick="showPage('invoices')">Invoice</button></td></tr>
+            <tr><td class="mono gold">#PO-1038</td><td>CleanPro Services</td><td>Supplies Monthly</td><td>₹45,000</td><td>₹8,100</td><td style="font-weight:700;">₹53,100</td><td>30 May 2026</td><td><span class="badge active">Completed</span></td><td><button class="btn-sm outline" onclick="showPage('invoices')">Invoice</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== INVOICE PAGE ===== -->
+    <section class="page" id="page-invoices">
+      <div class="page-header">
+        <div><h2>Invoice Generation</h2><p>Generate, print, download, and email invoices.</p></div>
+      </div>
+      <div class="invoice-wrap">
+        <div class="invoice-box">
+          <div class="inv-header">
+            <div>
+              <div class="inv-logo">⬡ VendorBridge</div>
+              <div class="inv-tagline">Procurement & Vendor Management ERP</div>
+              <div class="inv-title-word">INVOICE</div>
+              <div class="inv-number">#INV-2026-1042</div>
+            </div>
+            <div class="inv-meta-block">
+              <div class="inv-meta-row"><span>Date</span><span>5 June 2026</span></div>
+              <div class="inv-meta-row"><span>Due Date</span><span>5 July 2026</span></div>
+              <div class="inv-meta-row"><span>PO Reference</span><span>#PO-1042</span></div>
+              <div class="inv-meta-row"><span>Status</span><span><span class="badge approved">Issued</span></span></div>
+            </div>
+          </div>
+          <div class="inv-parties">
+            <div>
+              <div class="inv-party-label">BILL TO</div>
+              <div class="inv-party-name">Acme Corp Pvt Ltd</div>
+              <div class="inv-party-detail">Procurement Department<br>123 Business Park, Ahmedabad - 380001<br>GSTIN: 24AABCA1234B1Z9</div>
+            </div>
+            <div>
+              <div class="inv-party-label">FROM VENDOR</div>
+              <div class="inv-party-name">Tech Supplies Pvt Ltd</div>
+              <div class="inv-party-detail">Amit Shah (Contact)<br>456 Tech Hub, Ahmedabad - 380015<br>GSTIN: 22AABCT1234C1Z5</div>
+            </div>
+          </div>
+          <table class="data-table" style="margin-bottom:16px;">
+            <thead><tr><th>#</th><th>Item Description</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Dell Latitude 5540 Laptop (Core i7, 16GB, 512GB SSD)</td><td>25</td><td>₹52,000</td><td>₹13,00,000</td></tr>
+            </tbody>
+          </table>
+          <div class="inv-totals">
+            <div class="inv-total-row"><span>Subtotal</span><span>₹13,00,000</span></div>
+            <div class="inv-total-row"><span>IGST @ 18%</span><span>₹2,34,000</span></div>
+            <div class="inv-total-row grand"><span>Grand Total</span><span>₹15,34,000</span></div>
+          </div>
+          <div class="inv-note">Amount in words: Fifteen Lakhs Thirty Four Thousand Rupees Only</div>
+          <div class="inv-actions">
+            <button class="btn-gold"><i class="fa-solid fa-download"></i> Download PDF</button>
+            <button class="btn-outline"><i class="fa-solid fa-print"></i> Print</button>
+            <button class="btn-outline"><i class="fa-solid fa-envelope"></i> Send via Email</button>
+            <button class="btn-outline" onclick="showPage('purchase-orders')" style="margin-left:auto;">
+              <i class="fa-solid fa-arrow-left"></i> Back to POs
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ACTIVITY LOGS PAGE ===== -->
+    <section class="page" id="page-activity">
+      <div class="page-header">
+        <div><h2>Activity Logs</h2><p>Complete audit trail of all procurement actions.</p></div>
+        <div class="page-header-actions">
+          <button class="btn-outline">Export Logs</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>All Activity</span></div>
+        <div class="activity-feed full">
+          <div class="af-item"><div class="af-dot green"></div><div class="af-body"><div class="af-text">Invoice #INV-2026-1042 generated for PO #1042</div><div class="af-time">5 Jun 2026 · 11:42 AM · virang shah · Procurement Officer</div></div></div>
+          <div class="af-item"><div class="af-dot blue"></div><div class="af-body"><div class="af-text">PO #1042 approved by Manager — Remark: "Proceed"</div><div class="af-time">4 Jun 2026 · 3:15 PM · Sneha Sharma · Manager</div></div></div>
+          <div class="af-item"><div class="af-dot gold"></div><div class="af-body"><div class="af-text">Tech Supplies quotation selected for RFQ #RFQ-041</div><div class="af-time">3 Jun 2026 · 10:30 AM · virang shah · Procurement Officer</div></div></div>
+          <div class="af-item"><div class="af-dot gold"></div><div class="af-body"><div class="af-text">Quotation submitted by Tech Supplies for RFQ #041 — ₹52,000/unit</div><div class="af-time">2 Jun 2026 · 2:00 PM · Tech Supplies · Vendor</div></div></div>
+          <div class="af-item"><div class="af-dot gold"></div><div class="af-body"><div class="af-text">RFQ #RFQ-041 created — Office Laptops Q3 — 25 units</div><div class="af-time">1 Jun 2026 · 9:00 AM · virang shah · Procurement Officer</div></div></div>
+          <div class="af-item"><div class="af-dot red"></div><div class="af-body"><div class="af-text">PO #1039 rejected — "Price too high, re-quote required"</ div>< div class="af-time" > 28 May 2026 · 4:45 PM · Sneha Sharma · Manager</ div ></ div ></ div >
+          <div class="af-item"><div class="af-dot blue"></div><div class="af-body"><div class="af-text">PO #1039 submitted for approval — Office Furniture ₹3,20,000</div><div class="af-time">27 May 2026 · 11:00 AM · virang shah · Procurement Officer</div></div></div>
+          <div class="af-item"><div class="af-dot green"></div><div class="af-body"><div class="af-text">Vendor Tech Supplies Pvt Ltd registered and verified</div><div class="af-time">25 May 2026 · 2:10 PM · Admin</div></div></div>
+          <div class="af-item"><div class="af-dot blue"></div><div class="af-body"><div class="af-text">New user virang shah added — Role: Procurement Officer</div><div class="af-time">20 May 2026 · 9:30 AM · Admin</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REPORTS PAGE ===== -->
+    <section class="page" id="page-reports">
+      <div class="page-header">
+        <div><h2>Reports & Analytics</h2><p>Procurement insights and spending trends.</p></div>
+        <div class="page-header-actions">
+          <button class="btn-outline">Export CSV</button>
+          <button class="btn-outline">Export PDF</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><div class="sc-icon gold"><i class="fa-solid fa-indian-rupee-sign"></i></div><div class="sc-body"><div class="sc-label">Total Spend (June)</div><div class="sc-val">₹18.7L</div><div class="sc-sub">+12% vs May</div></div></div>
+        <div class="stat-card"><div class="sc-icon green"><i class="fa-solid fa-building-store"></i></div><div class="sc-body"><div class="sc-label">Active Vendors</div><div class="sc-val green">12</div><div class="sc-sub">3 new this month</div></div></div>
+        <div class="stat-card"><div class="sc-icon blue"><i class="fa-solid fa-clock"></i></div><div class="sc-body"><div class="sc-label">Avg Approval Time</div><div class="sc-val">1.2d</div><div class="sc-sub">Down from 2.1 days</div></div></div>
+        <div class="stat-card"><div class="sc-icon amber"><i class="fa-solid fa-chart-line"></i></div><div class="sc-body"><div class="sc-label">PO Completion Rate</div><div class="sc-val amber">94%</div><div class="sc-sub">Above 90% target</div></div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-header"><span>Monthly Spend (₹ Lakhs)</span></div>
+          <div class="bar-chart" id="spendChart"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span>Vendor Performance (Rating / 5)</span></div>
+          <div class="bar-chart" id="vendorChart"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span>Spend by Category</span></div>
+          <div class="bar-chart" id="catChart"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span>Procurement Summary</span></div>
+          <table class="data-table">
+            <tbody>
+              <tr><td class="criteria-col">Total RFQs Created</td><td style="font-weight:600;">41</td></tr>
+              <tr><td class="criteria-col">Total POs Generated</td><td style="font-weight:600;">24</td></tr>
+              <tr><td class="criteria-col">Total Invoices Issued</td><td style="font-weight:600;">22</td></tr>
+              <tr><td class="criteria-col">Avg Quotations per RFQ</td><td style="font-weight:600;">2.8</td></tr>
+              <tr><td class="criteria-col">Rejections this Month</td><td style="font-weight:600; color:#ef9a9a;">3</td></tr>
+              <tr><td class="criteria-col">Savings vs Budget</td><td style="font-weight:600; color:#6bcf6b;">₹2.1L</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROFILE PAGE ===== -->
+    <section class="page" id="page-profile">
+      <div class="page-header">
+        <div><h2>My Profile</h2><p>Manage your account and preferences.</p></div>
+      </div>
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-header"><span>Profile Information</span></div>
+          <div class="profile-view">
+            <div class="pv-avatar" id="pvAvatar">vs</div>
+            <div class="pv-name" id="pvName">virang shah</div>
+            <div class="pv-role" id="pvRole">Procurement Officer</div>
+            <div class="pv-email" id="pvEmail">officer@company.com</div>
+          </div>
+          <div class="form-grid" style="margin-top:20px;">
+            <div class="form-group"><label>First Name</label><input value="Virang"></div>
+            <div class="form-group"><label>Last Name</label><input value="Shah"></div>
+            <div class="form-group"><label>Email</label><input type="email" value="officer@company.com"></div>
+            <div class="form-group"><label>Phone</label><input value="+91 98765 43210"></div>
+            <div class="form-group"><label>Department</label><input value="Procurement"></div>
+            <div class="form-group"><label>Role</label><input value="Procurement Officer" readonly></div>
+          </div>
+          <div class="form-actions"><button class="btn-gold">Save Changes</button></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span>Change Password</span></div>
+          <div class="form-grid" style="grid-template-columns:1fr;">
+            <div class="form-group"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label>New Password</label><input type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" placeholder="••••••••"></div>
+          </div>
+          <div class="form-actions"><button class="btn-gold">Update Password</button></div>
+
+          <div class="card-header" style="margin-top:24px;"><span>Session Info</span></div>
+          <div style="font-size:13px; color:var(--text-dim);">
+            <div style="padding:6px 0; border-bottom:1px solid var(--border);">Last login: Today, 9:00 AM</div>
+            <div style="padding:6px 0; border-bottom:1px solid var(--border);">Session started: Today</div>
+            <div style="padding:6px 0;">Role: <span id="sessionRole" style="color:var(--gold);">Procurement Officer</span></div>
+          </div>
+          <div class="form-actions" style="margin-top:16px;">
+            <button class="btn-outline" style="color:#ef9a9a; border-color:rgba(239,154,154,0.3);" onclick="doLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
